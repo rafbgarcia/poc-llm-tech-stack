@@ -5,6 +5,11 @@ import { useState } from "react";
 import Markdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
+const apiUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://llmtechstack.fly.dev"
+    : "http://localhost:8000";
+
 export default function Home() {
   const [ragOutput, setRagOutput] = useState("");
   const [noRagOutput, setNoRagOutput] = useState("");
@@ -23,7 +28,7 @@ export default function Home() {
     const router = nextjs.includes("pages") ? "pages" : "app";
 
     setRagOutput("...");
-    const res = await fetch("http://localhost:8000/with-rag", {
+    const res = await fetch(`${apiUrl}/with-rag`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +52,7 @@ export default function Home() {
     const router = nextjs.includes("pages") ? "pages" : "app";
 
     setNoRagOutput("...");
-    const res = await fetch("http://localhost:8000/without-rag", {
+    const res = await fetch(`${apiUrl}/without-rag`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
