@@ -107,32 +107,28 @@ Also create a server action that returns validation errors and display in the cl
       <div className="grid grid-cols-2 gap-4 p-10">
         <div>
           <h3 className="font-semibold">Without RAG</h3>
-          <Md code={noRagOutput} />
+          <Md>{noRagOutput}</Md>
         </div>
         <div>
           <h3 className="font-semibold">With RAG</h3>
-          <Md code={ragOutput} />
+          <Md>{ragOutput}</Md>
         </div>
       </div>
     </>
   );
 }
 
-function Md({ code }: { code: string }) {
+function Md({ children }: { children: string }) {
   return (
     <Markdown
-      children={code}
       components={{
         code(props) {
-          const { children, className, node, ...rest } = props;
+          const { children, className, ...rest } = props;
           const match = /language-(\w+)/.exec(className || "");
           return match ? (
-            <SyntaxHighlighter
-              {...rest}
-              PreTag="div"
-              children={String(children).replace(/\n$/, "")}
-              language={match[1]}
-            />
+            <SyntaxHighlighter {...rest} PreTag="div" language={match[1]}>
+              {String(children).replace(/\n$/, "")}
+            </SyntaxHighlighter>
           ) : (
             <code {...rest} className={className}>
               {children}
@@ -140,6 +136,8 @@ function Md({ code }: { code: string }) {
           );
         },
       }}
-    />
+    >
+      {children}
+    </Markdown>
   );
 }
